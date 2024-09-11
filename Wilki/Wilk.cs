@@ -10,20 +10,19 @@ namespace Wilki
     {
         
         static Mutex mutex = new Mutex();
-        Zajac zajac = new Zajac("");
+        Zajac zajac = new Zajac();
         bool isGlodny = true;
         Random random = new Random();
         ListaZajacy listaZajacy = new ListaZajacy();
-        static Barrier barrier = new Barrier(0, b => { Zajac zajac = new Zajac(""); zajac.multiplyZajace(); });
+        static Barrier barrier = new Barrier(0, b => { Zajac zajac = new Zajac(); zajac.multiplyZajace(); });
         static bool isZajacLeft = true;
         public Koordynaty koordynaty;
-        string imie;
+        static List<int> Targets = new List<int>();
 
-
-        public Wilk(string a) 
+        public Wilk() 
         {
-            this.imie = a;
             koordynaty = new Koordynaty();
+            Console.WriteLine(this.koordynaty.getKoordynaty());
         }
 
         public void RunWilk()
@@ -39,16 +38,14 @@ namespace Wilki
         {
             while (isZajacLeft)
             {
-                this.isGlodny = true;
+                /*this.isGlodny = true;
                 while(this.isGlodny)
                 {
                     mutex.WaitOne();
-                    Console.WriteLine(listaZajacy.iloscZajacy());
                     if(listaZajacy.iloscZajacy()>1)
                     {
                         int zajacDoZabicia = findNajbliszczegoZajaca(
                             this.koordynaty.getKoordynaty().Item1, this.koordynaty.getKoordynaty().Item2);
-                        // zajacDoZabicia = listaZajacy.randomZajac();
                         zajac = listaZajacy.returnZajac(zajacDoZabicia);
                         zajac.zajacZjedzony(zajacDoZabicia);
                         odpoczywanie();
@@ -62,7 +59,17 @@ namespace Wilki
                     }
                 }
                 if(isZajacLeft)
-                    barrier.SignalAndWait();
+                    barrier.SignalAndWait();*/
+                mutex.WaitOne();
+                int zajacDoZabicia = findNajbliszczegoZajaca(
+                           this.koordynaty.getKoordynaty().Item1, this.koordynaty.getKoordynaty().Item2);
+                while(Targets.IndexOf(zajacDoZabicia)!=-1)
+                {
+                    zajacDoZabicia = listaZajacy.randomZajac();
+                }
+                Targets.Add(zajacDoZabicia);
+                mutex.ReleaseMutex();
+                
             }
         }
 
@@ -70,7 +77,7 @@ namespace Wilki
         {
             mutex.ReleaseMutex();
             Thread.Sleep(1000);
-            if(random.Next(101)<=10)
+            if(random.Next(101)<=50)
             {
                 this.isGlodny = false;
             }

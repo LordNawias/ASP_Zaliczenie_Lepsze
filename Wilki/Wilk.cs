@@ -17,10 +17,12 @@ namespace Wilki
         static Barrier barrier = new Barrier(0, b => { Zajac zajac = new Zajac(""); zajac.multiplyZajace(); });
         static bool isZajacLeft = true;
         public Koordynaty koordynaty;
+        string imie;
 
 
-        public Wilk() 
+        public Wilk(string a) 
         {
+            this.imie = a;
             koordynaty = new Koordynaty();
         }
 
@@ -37,14 +39,16 @@ namespace Wilki
         {
             while (isZajacLeft)
             {
-                isGlodny = true;
+                this.isGlodny = true;
                 while(this.isGlodny)
                 {
                     mutex.WaitOne();
                     Console.WriteLine(listaZajacy.iloscZajacy());
-                    if(listaZajacy.iloscZajacy()>0)
+                    if(listaZajacy.iloscZajacy()>1)
                     {
-                        int zajacDoZabicia = listaZajacy.randomZajac();
+                        int zajacDoZabicia = findNajbliszczegoZajaca(
+                            this.koordynaty.getKoordynaty().Item1, this.koordynaty.getKoordynaty().Item2);
+                        // zajacDoZabicia = listaZajacy.randomZajac();
                         zajac = listaZajacy.returnZajac(zajacDoZabicia);
                         zajac.zajacZjedzony(zajacDoZabicia);
                         odpoczywanie();
@@ -53,7 +57,7 @@ namespace Wilki
                     {
                         isZajacLeft=false;
                         odpoczywanie();
-                        isGlodny=false;
+                        this.isGlodny=false;
                         break;
                     }
                 }
@@ -66,12 +70,21 @@ namespace Wilki
         {
             mutex.ReleaseMutex();
             Thread.Sleep(1000);
-            if(random.Next(101)<=50)
+            if(random.Next(101)<=10)
             {
                 this.isGlodny = false;
             }
         }
 
-
+        int findNajbliszczegoZajaca(int x, int y)
+        {
+                List<int> odleglosci = new List<int>();
+                foreach (Zajac zajac in listaZajacy.lista())
+                {
+                    int odlegloscWzor = (int)Math.Sqrt(Math.Pow((zajac.koordynaty.getKoordynaty().Item1 - x), 2) + Math.Pow((zajac.koordynaty.getKoordynaty().Item2 - y), 2));
+                    odleglosci.Add(odlegloscWzor);
+                }
+                return odleglosci.IndexOf(odleglosci.Min());
+        }
     }
 }

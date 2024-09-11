@@ -31,9 +31,15 @@ namespace Wilki
         {
             while(this.isAlive)
             {
+                if (listaZajacy.iloscZajacy() == 1)
+                {
+                    this.isAlive = false;
+                    break;
+                }
                 this.koordynaty.moveX1();
                 this.koordynaty.moveY1();
                 Thread.Sleep(50);
+                
             }
         }
 

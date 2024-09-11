@@ -22,8 +22,8 @@ namespace Wilki
             listaZajacy.dodajZajaca(z3);
             listaZajacy.dodajZajaca(z4);
             listaZajacy.dodajZajaca(z5);
-            Wilk w1 = new Wilk();
-            Wilk w2 = new Wilk();
+            Wilk w1 = new Wilk("W1");
+            Wilk w2 = new Wilk("W2");
             w1.RunWilk();
             w2.RunWilk();
         }

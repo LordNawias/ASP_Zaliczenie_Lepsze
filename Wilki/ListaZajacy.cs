@@ -8,7 +8,7 @@ namespace Wilki
 {
     class ListaZajacy
     {
-        static List<Zajac> listaZajacy = new List<Zajac>();
+        public static List<Zajac> listaZajacy = new List<Zajac>();
         Random random = new Random();
         public ListaZajacy() { }
 
@@ -41,6 +41,11 @@ namespace Wilki
         public Zajac returnZajac(int index)
         {
             return listaZajacy[index];
+        }
+
+        public List<Zajac> lista()
+        {
+            return listaZajacy;
         }
     }
 }

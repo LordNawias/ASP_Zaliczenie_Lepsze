@@ -14,7 +14,6 @@ namespace Wilki
         Thread t;
         bool isAlive = true;
         ListaZajacy listaZajacy = new ListaZajacy();
-        string imie;
         public Zajac()
         {
              koordynaty = new Koordynaty();
@@ -51,16 +50,14 @@ namespace Wilki
                 z1= new Zajac();
                 listaZajacy.dodajZajaca(z1);
                 z1.runZajace();
-                Console.WriteLine("Stworzono nowego zajaca");
+                Console.WriteLine("Nowy zajac narodzony");
             }
         }
 
-        public void zajacZjedzony(int index)
+        public void zajacZjedzony()
         {
-            //if(this.koordynaty.getKoordynaty()==new Tuple<int, int>(x, y))
             this.isAlive = false;
-            Console.WriteLine("Zabito zajaca" + index);
-            listaZajacy.removeZajac(index);
+            listaZajacy.removeZajac(this);
         }
     }
 }

@@ -70,6 +70,23 @@ namespace Wilki
                 }
             }
         }
+
+        public void moveX3(char dir)
+        {
+            if (dir == 'l')
+                this.x -= 3;
+            if (dir == 'r')
+                this.x += 3;
+
+        }
+
+        public void moveY3(char dir)
+        {
+            if (dir == 'u')
+                this.y += 3;
+            if (dir == 'd')
+                this.y -= 3;
+        }
         public Tuple<int, int> getKoordynaty()
         {
             return new Tuple<int, int> (this.x, this.y);

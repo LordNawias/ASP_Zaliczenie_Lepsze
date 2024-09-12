@@ -27,15 +27,9 @@ namespace Wilki
             int tmp = random.Next(listaZajacy.Count);
             return tmp;
         }
-
-        public int findZajac(Zajac zajac)
+        public void removeZajac(Zajac zajac)
         {
-            return listaZajacy.FindIndex(f => f.koordynaty.getKoordynaty() == zajac.koordynaty.getKoordynaty());
-        }
-
-        public void removeZajac(int index)
-        {
-            listaZajacy.RemoveAt(index);
+            listaZajacy.Remove(zajac);
         }
 
         public Zajac returnZajac(int index)

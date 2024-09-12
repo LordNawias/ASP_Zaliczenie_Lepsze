@@ -8,7 +8,7 @@ namespace Wilki
 {
     class ListaZajacy
     {
-        public static List<Zajac> listaZajacy = new List<Zajac>();
+        public static List<Zajac> listaZajacy = new List<Zajac>(); //statyczna lista zeby wszystkie klasy mialy wglad w aktualny stan zajacy
         Random random = new Random();
         public ListaZajacy() { }
 

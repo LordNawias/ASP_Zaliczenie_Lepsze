@@ -16,7 +16,7 @@ namespace Wilki
         ListaZajacy listaZajacy = new ListaZajacy();
         public Zajac()
         {
-             koordynaty = new Koordynaty();
+             koordynaty = new Koordynaty(); //ustawienie loswych koordynatow dla zajaca znajdujacych sie w srodku okreslonej strefy
              listaZajacy.dodajZajaca(this);
         }
 
@@ -30,19 +30,17 @@ namespace Wilki
         {
             while(this.isAlive)
             {
-                if (listaZajacy.iloscZajacy() == 1)
+                if (listaZajacy.iloscZajacy() == 1) //jesli zostaje pojedynczy zajac, wymiera
                 {
                     this.isAlive = false;
                     break;
                 }
                 this.koordynaty.moveX1();
                 this.koordynaty.moveY1();
-                Thread.Sleep(50);
-                
             }
         }
 
-        public void multiplyZajace() 
+        public void multiplyZajace() //po dotarciu wilkiow do bariery, dodaje losowa ilosc nowych zajacy
         {
             Zajac z1;
             for(int i=0; i<random.Next(5, 16); i++)

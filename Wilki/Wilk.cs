@@ -19,11 +19,13 @@ namespace Wilki
         public Koordynaty koordynaty;
         static List<int> Targets = new List<int>();
         Zajac tracking;
-        Wilk wilk;
+        string imie;
+        static int wspolczynnikGlodu = 51;
 
-        public Wilk() 
+        public Wilk(string x) 
         {
-            koordynaty = new Koordynaty();
+            this.koordynaty = new Koordynaty();
+            this.imie = x;
         }
 
         public void RunWilk()
@@ -37,26 +39,27 @@ namespace Wilki
         
         void runningWilk()
         {
-            while (isZajacLeft)
+            while (isZajacLeft)  //wykonuje glowny loop tylko jesli sa zajace do zjedzenia
             {
                 this.isGlodny = true;
                
-                while(this.isGlodny)
+                while(this.isGlodny)  //kazdy wilk ma osobnego loopa ktorego konczy w roznych momentach w zaleznosci po ilu posilkach sie nasyci
                 {
-                    if(listaZajacy.iloscZajacy()>1)
+                    if(listaZajacy.iloscZajacy()>1) //sprawdzanie w kazdym przejsciu czy zostaly jeszcze jakies zajace do zjedzenia
                     {
-                        mutex.WaitOne();
-                        int zajacDoZabicia = findNajbliszczegoZajaca(
+                        mutex.WaitOne(); //mutex zeby kazdy wilk odzzielnie wybral cel
+                        int zajacDoZabicia = findNajbliszczegoZajaca( 
                                    this.koordynaty.getKoordynaty().Item1, this.koordynaty.getKoordynaty().Item2);
                         while (Targets.IndexOf(zajacDoZabicia) != -1)
                         {
                             zajacDoZabicia = listaZajacy.randomZajac();
-                        }
+                        }//wilki wybieraja najblizszy cel, chyba ze inny wilk juz sobie obral tego zajaca za cel, wtedy biora losowy
                         Targets.Add(zajacDoZabicia);
                         this.tracking = listaZajacy.returnZajac(zajacDoZabicia);
-                        mutex.ReleaseMutex();
-                        while (odleglosc(this.koordynaty.getKoordynaty().Item1, this.tracking.koordynaty.getKoordynaty().Item1, this.koordynaty.getKoordynaty().Item2, this.tracking.koordynaty.getKoordynaty().Item2) > 5)
+                        mutex.ReleaseMutex();//cele pojedynczo wybrane, wiec zwolnienie mutexa zeby mogly mogly poodazac za swoim celem w tym samym czasie
+                        while (odleglosc(this.koordynaty.getKoordynaty().Item1, this.tracking.koordynaty.getKoordynaty().Item1, this.koordynaty.getKoordynaty().Item2, this.tracking.koordynaty.getKoordynaty().Item2) > 3)
                         {
+                            Console.WriteLine("Wilk " + this.imie + this.koordynaty.getKoordynaty() + " goni za zajacem na " + this.tracking.koordynaty.getKoordynaty());
                             if (this.koordynaty.getKoordynaty().Item1 < this.tracking.koordynaty.getKoordynaty().Item1)
                             {
                                 this.koordynaty.moveX3('r');
@@ -73,11 +76,13 @@ namespace Wilki
                             {
                                 this.koordynaty.moveY3('d');
                             }
-                        }
-                        mutex.WaitOne();
+                        }//gonienie zajaca
+                        mutex.WaitOne();//mtex w celu zablokowania wielu wilkow przed modyfikacja tej samej listy
                         tracking.zajacZjedzony();
-                        Console.WriteLine("Wilka zjadl zajaca, zostalo: " + listaZajacy.iloscZajacy());
-                        odpoczywanie();
+                        Console.WriteLine("Wilk" + this.imie + "zjadl zajaca, zostalo: " + listaZajacy.iloscZajacy());
+                        odpoczywanie();//kazdy wilk odpoczywa po zjedzeniu i wykonuje losowy test zeby sprawdzic czy dalej jest glodny
+                       
+
                     }
                     else
                     {
@@ -86,7 +91,7 @@ namespace Wilki
                     
                 }
 
-                if(isZajacLeft)
+                if(isZajacLeft)//jesli sa jeszcze jakies przy zyciu, czekaja na bariere, ktora doda nowe zajace i pozwoli ponowic lowy
                 {
                     barrier.SignalAndWait();
                 }
@@ -98,7 +103,7 @@ namespace Wilki
         {
             mutex.ReleaseMutex();
             Thread.Sleep(1000);
-            if(random.Next(101)<=50)
+            if(random.Next(101)<=wspolczynnikGlodu)
             {
                 this.isGlodny = false;
             }

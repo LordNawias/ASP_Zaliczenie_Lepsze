@@ -12,9 +12,9 @@ namespace Wilki
                 Zajac zajac = new Zajac();
                 zajac.runZajace();
             }
-            Wilk w1 = new Wilk();
-            Wilk w2 = new Wilk();
-            Wilk w3 = new Wilk();
+            Wilk w1 = new Wilk("W1");
+            Wilk w2 = new Wilk("W2");
+            Wilk w3 = new Wilk("W3");
             w1.RunWilk();
             w2.RunWilk();
             w3.RunWilk();
